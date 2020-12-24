@@ -48,6 +48,7 @@ import android.widget.Button;
 
 import androidx.preference.PreferenceManager;
 
+import com.android.internal.util.corvus.Utils;
 import com.android.internal.util.corvus.ThemesUtils;
 
 import com.corvus.themes.R;
@@ -268,13 +269,13 @@ public class Utils {
     }
 
     public static boolean threeButtonNavbarEnabled(Context context) {
-        boolean defaultToNavigationBar = context.getResources().getBoolean(
-                com.android.internal.R.bool.config_showNavigationBar);
+        boolean defaultToNavigationBar = Utils.deviceSupportNavigationBar(context);
         boolean navigationBar = Settings.System.getInt(context.getContentResolver(),
                 Settings.System.FORCE_SHOW_NAVBAR, defaultToNavigationBar ? 1 : 0) == 1;
-        boolean hasNavbar = false;
-        hasNavbar = com.android.internal.util.corvus.Utils.isThemeEnabled(
-                "com.android.internal.systemui.navbar.threebutton") && navigationBar;
+        boolean hasNavbar = (context.getResources().getInteger(
+                com.android.internal.R.integer.config_navBarInteractionMode) == 0)
+                && navigationBar;
+
         return hasNavbar;
     }
 }
